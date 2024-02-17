@@ -1,0 +1,21 @@
+* {
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	width: 80%;
+	margin: auto;
+}
+
+.title {
+	font-size: 3rem;
+}
+
+.text-center {
+	text-align: center;
+}
+button {
+	min-width: 2rem;
+	margin: 0 1rem;
+}
