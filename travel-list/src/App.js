@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./style.css";
 
 export default function App() {
 	const [items, setItems] = useState([]);
@@ -10,11 +11,22 @@ export default function App() {
 	function handleDeleteItems(id) {
 		setItems((items) => items.filter((item) => item.id !== id));
 	}
+	function handleToggleItem(id) {
+		setItems((items) =>
+			items.map((item) =>
+				item.id === id ? { ...item, packed: !item.packed } : item
+			)
+		);
+	}
 	return (
 		<div>
 			<Logo />
 			<Form onAddItems={handleAddItems} />
-			<PackingList items={items} onDeleteItem={handleDeleteItems} />
+			<PackingList
+				items={items}
+				onDeleteItem={handleDeleteItems}
+				onItemToggle={handleToggleItem}
+			/>
 			<Stats />
 		</div>
 	);
@@ -75,10 +87,15 @@ function Logo() {
 	return <h1>🌴Far away</h1>;
 }
 
-function Item({ item, onDeleteItem }) {
+function Item({ item, onDeleteItem, onItemToggle }) {
 	return (
 		<li>
-			<span>
+			<input
+				type="checkbox"
+				value={item.packed}
+				onClick={() => onItemToggle(item.id)}
+			/>
+			<span className={item.packed ? "packed" : ""}>
 				{item.quantity} {item.description}
 			</span>
 			<button onClick={() => onDeleteItem(item.id)}>❌</button>
@@ -86,11 +103,15 @@ function Item({ item, onDeleteItem }) {
 	);
 }
 
-function PackingList({ items, onDeleteItem }) {
+function PackingList({ items, onDeleteItem, onItemToggle }) {
 	return (
 		<ul>
 			{items.map((item) => (
-				<Item item={item} onDeleteItem={onDeleteItem} />
+				<Item
+					item={item}
+					onDeleteItem={onDeleteItem}
+					onItemToggle={onItemToggle}
+				/>
 			))}
 		</ul>
 	);
